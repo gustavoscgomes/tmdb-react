@@ -12,7 +12,7 @@ const Detalhes = () => {
 
   const getMovie = () => {
     api
-      .get(`/movie/${id}?language=pt-BR`)
+      .get(`/movie/${id}`)
       .then((response) => {
         setMovie(response.data);
         setLoading(false);
@@ -30,10 +30,12 @@ const Detalhes = () => {
   if (loading) {
     return (
       <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
       >
         <CircularProgress />
       </Box>
@@ -43,10 +45,12 @@ const Detalhes = () => {
   if (error) {
     return (
       <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
       >
         <Typography variant="h6" color="error">
           {error}

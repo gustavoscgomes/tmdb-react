@@ -7,6 +7,9 @@ import Lancamentos from "./pages/Lancamentos/Lancamentos.jsx";
 import Contato from "./pages/Contato/Contato.jsx";
 import Detalhes from "./pages/Detalhes/Detalhes.jsx";
 import Footer from "./components/Footer/Footer.jsx";
+import SearchPage from "./pages/SearchPage/SearchPage.jsx";
+
+
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -16,6 +19,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/" element={<Lancamentos />} />
         <Route path="/contato" element={<Contato/>} />
         <Route path="/filme/:id" element={<Detalhes />} />
+        <Route path="search/:query" element={<SearchPage/>} />
       </Routes>
       <Footer />
     </BrowserRouter>

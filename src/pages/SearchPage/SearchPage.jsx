@@ -1,16 +1,18 @@
-import { Grid, Typography, CircularProgress, Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import api from "../../services/api";
+import { Box, CircularProgress, Typography, Grid } from "@mui/material";
 import MovieCard from "../../components/MovieCard/MovieCard";
 
-const Lancamentos = () => {
-  const [movies, setMovies] = useState([]);
+const SearchPage = () => {
+  const { query } = useParams();
+  const [movies, setMovies] = useState([null]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const getMovies = () => {
     api
-      .get("/movie/upcoming")
+      .get(`/search/movie?query=${query}`)
       .then((response) => {
         setMovies(response.data.results);
         setLoading(false);
@@ -23,7 +25,7 @@ const Lancamentos = () => {
 
   useEffect(() => {
     getMovies();
-  }, []);
+  }, [query]);
 
   if (loading) {
     return (
@@ -84,4 +86,4 @@ const Lancamentos = () => {
   );
 };
 
-export default Lancamentos;
+export default SearchPage;
