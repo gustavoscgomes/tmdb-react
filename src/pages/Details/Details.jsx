@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { Box, CircularProgress, Typography, Chip } from "@mui/material";
 import MovieCard from "../../components/MovieCard/MovieCard";
+import LoadingBox from "../../components/ui/LoadingBox";
+import ErrorBox from "../../components/ui/ErrorBox";
 
-const Detalhes = () => {
+const Details = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -29,33 +31,13 @@ const Detalhes = () => {
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
+      <LoadingBox />
     );
   }
 
   if (error) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
-      </Box>
+      <ErrorBox message={error} />
     );
   }
 
@@ -117,4 +99,4 @@ const Detalhes = () => {
   );
 };
 
-export default Detalhes;
+export default Details;
