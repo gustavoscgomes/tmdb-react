@@ -1,26 +1,40 @@
-import {
-  Grid,
-  Typography,
-  CircularProgress,
-  Box,
-  Stack,
-  Pagination,
-} from "@mui/material";
+import { Box, Stack, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import MovieCard from "../../components/MovieCard/MovieCard";
+import LoadingBox from "../../components/ui/LoadingBox";
+import ErrorBox from "../../components/ui/ErrorBox";
 
-const Lancamentos = () => {
+const hoje = new Date();
+const daquiUmMes = new Date();
+daquiUmMes.setMonth(hoje.getMonth() + 1);
+
+// Função para formatar a data para yyyy-mm-dd
+const formatDate = (date) => {
+  return date.toISOString().split("T")[0];
+};
+
+// Variáveis para filtrar os filmes mais recentes
+const dataMin = formatDate(hoje);
+const dataMax = formatDate(daquiUmMes);
+const MAX_PAGES = 500;
+
+const UpcomingMovies = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  const getMovies = (pageNumber = 1) => {
+  const getMovies = (pageNumber = 1, dateMin, dateMax) => {
     api
-      .get("/movie/upcoming", {
-        params: { page: pageNumber },
+      .get("/discover/movie", {
+        params: {
+          page: pageNumber,
+          "release_date.gte": dateMin, // Data mínima
+          "release_date.lte": dateMax, // Data máxima
+          sort_by: "popularity.desc",
+        },
       })
       .then((response) => {
         setMovies(response.data.results);
@@ -34,39 +48,15 @@ const Lancamentos = () => {
   };
 
   useEffect(() => {
-    getMovies(page);
-  }, [page]);
+    getMovies(page, dataMin, dataMax);
+  }, [page, dataMin, dataMax]);
 
   if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+    return <LoadingBox />;
   }
 
   if (error) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
-      </Box>
-    );
+    return <ErrorBox message={error} />;
   }
 
   const handleChangePage = (event, value) => {
@@ -75,14 +65,12 @@ const Lancamentos = () => {
 
   return (
     <>
-      <Grid
-        container
-        spacing={2} // Espaçamento entre os itens
+      <Box
         sx={{
-          p: 2, // padding: 16px
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-          gap: 2, // gap: 16px
+          gap: 2,
+          p: 2,
         }}
       >
         {movies.map((movie) => (
@@ -97,11 +85,11 @@ const Lancamentos = () => {
             showButton={true}
           />
         ))}
-      </Grid>
+      </Box>
 
       <Stack direction="row" justifyContent="center" my={4} spacing={2}>
         <Pagination
-          count={totalPages > 500 ? 500 : totalPages}
+          count={Math.min(totalPages, MAX_PAGES)}
           color="primary"
           page={page}
           onChange={handleChangePage}
@@ -111,4 +99,4 @@ const Lancamentos = () => {
   );
 };
 
-export default Lancamentos;
+export default UpcomingMovies;
