@@ -64,7 +64,10 @@ const UpcomingMovies = () => {
     getMovies(page);
   }, [page]);
 
-  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number): void => {
+  const handleChangePage = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ): void => {
     setPage(value);
   };
 
@@ -74,12 +77,10 @@ const UpcomingMovies = () => {
   return (
     <>
       <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-          gap: 2,
-          p: 2,
-        }}
+        display="grid"
+        gridTemplateColumns="repeat(auto-fill, minmax(200px, 1fr))"
+        gap={2}
+        p={2}
       >
         {movies.map((movie) => (
           <MovieCard

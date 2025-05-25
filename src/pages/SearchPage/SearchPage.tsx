@@ -6,19 +6,33 @@ import MovieCard from "../../components/MovieCard/MovieCard";
 import LoadingBox from "../../components/ui/LoadingBox";
 import ErrorBox from "../../components/ui/ErrorBox";
 
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+  overview: string;
+  release_date: string;
+}
+
+interface MoviesResponse {
+  results: Movie[];
+  total_pages: number;
+}
+
 const MAX_PAGES = 500;
 
 const SearchPage = () => {
   const { query } = useParams();
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
-  const getMovies = (pageNumber = 1) => {
+  const getMovies = (pageNumber: number = 1): void => {
     api
-      .get(`/search/movie?query=${query}`, {
+      .get<MoviesResponse>(`/search/movie?query=${query}`, {
         params: {
           page: pageNumber,
         },
@@ -35,22 +49,17 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     getMovies(page);
   }, [query, page]);
 
-  console.log(movies);
-  if (loading) {
-    return <LoadingBox />;
-  }
 
-  if (error) {
-    return <ErrorBox message={error} />;
-  }
 
-  const handleChangePage = (event, value) => {
+  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number): void => {
     setPage(value);
   };
+
+  if (loading) return <LoadingBox />;
+  if (error) return <ErrorBox message={error} />;
 
   return (
     <>
@@ -58,7 +67,7 @@ const SearchPage = () => {
         display="grid"
         gridTemplateColumns="repeat(auto-fill, minmax(200px, 1fr))"
         gap={2}
-        p={2} // padding
+        p={2}
       >
         {movies.map((movie) => (
           <MovieCard

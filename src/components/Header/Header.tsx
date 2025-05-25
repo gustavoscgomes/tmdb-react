@@ -15,7 +15,6 @@ const Header = () => {
           gap: 2,
         }}
       >
-        {/* Logo + Navegação */}
         <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
           <NavLink to="/">
             <Box
@@ -37,7 +36,6 @@ const Header = () => {
           </NavLink>
         </Box>
 
-        {/* Barra de Busca */}
         <Box sx={{ mt: { xs: 1, md: 0 } }}>
           <SearchBar />
         </Box>
@@ -46,7 +44,7 @@ const Header = () => {
   );
 };
 
-// Estilo dos links de navegação
+// Estilo dos links de navegacao
 const navLinkSX = {
   color: "#ffffff",
   px: 2,
