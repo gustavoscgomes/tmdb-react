@@ -21,15 +21,12 @@ interface MovieDetails {
   genres: Genre[];
   runtime: number;
 }
-console.log("entrou");
 
 const Details = () => {
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  console.log("movie: ", movie);
   
   const getMovie = () => {
     api
