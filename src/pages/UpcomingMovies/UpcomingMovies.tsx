@@ -1,14 +1,9 @@
-import {
-  Grid,
-  Typography,
-  CircularProgress,
-  Box,
-  Stack,
-  Pagination,
-} from "@mui/material";
+import { Box, Stack, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import MovieCard from "../../components/MovieCard/MovieCard";
+import LoadingBox from "../../components/ui/LoadingBox";
+import ErrorBox from "../../components/ui/ErrorBox";
 
 interface Movie {
   id: number;
@@ -24,17 +19,35 @@ interface MoviesResponse {
   total_pages: number;
 }
 
-const Lancamentos = () => {
+const MAX_PAGES = 500;
+
+const UpcomingMovies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
 
+  const hoje = new Date();
+  const daquiUmMes = new Date();
+  daquiUmMes.setMonth(hoje.getMonth() + 1);
+
+  const formatDate = (date: Date): string => {
+    return date.toISOString().split("T")[0];
+  };
+
+  const dataMin = formatDate(hoje);
+  const dataMax = formatDate(daquiUmMes);
+
   const getMovies = (pageNumber: number = 1): void => {
     api
-      .get<MoviesResponse>("/movie/upcoming", {
-        params: { page: pageNumber },
+      .get<MoviesResponse>("/discover/movie", {
+        params: {
+          page: pageNumber,
+          "release_date.gte": dataMin,
+          "release_date.lte": dataMax,
+          sort_by: "popularity.desc",
+        },
       })
       .then((response) => {
         setMovies(response.data.results);
@@ -55,48 +68,17 @@ const Lancamentos = () => {
     setPage(value);
   };
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
-      </Box>
-    );
-  }
+  if (loading) return <LoadingBox />;
+  if (error) return <ErrorBox message={error} />;
 
   return (
     <>
-      <Grid
-        container
-        spacing={2}
+      <Box
         sx={{
-          p: 2,
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
           gap: 2,
+          p: 2,
         }}
       >
         {movies.map((movie) => (
@@ -111,11 +93,11 @@ const Lancamentos = () => {
             showButton={true}
           />
         ))}
-      </Grid>
+      </Box>
 
       <Stack direction="row" justifyContent="center" my={4} spacing={2}>
         <Pagination
-          count={totalPages > 500 ? 500 : totalPages}
+          count={Math.min(totalPages, MAX_PAGES)}
           color="primary"
           page={page}
           onChange={handleChangePage}
@@ -125,4 +107,4 @@ const Lancamentos = () => {
   );
 };
 
-export default Lancamentos;
+export default UpcomingMovies;
