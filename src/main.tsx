@@ -2,16 +2,16 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
-import Header from "./components/Header/Header.jsx";
-import Lancamentos from "./pages/Lancamentos/Lancamentos.jsx";
-import Contato from "./pages/Contato/Contato.jsx";
-import Detalhes from "./pages/Detalhes/Detalhes.jsx";
-import Footer from "./components/Footer/Footer.jsx";
-import SearchPage from "./pages/SearchPage/SearchPage.jsx";
+import Header from "./components/Header/Header";
+import Lancamentos from "./pages/Lancamentos/Lancamentos";
+import Contato from "./pages/Contato/Contato";
+import Detalhes from "./pages/Detalhes/Detalhes";
+import Footer from "./components/Footer/Footer";
+import SearchPage from "./pages/SearchPage/SearchPage";
 
 
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <Header />
