@@ -10,16 +10,30 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 import MovieCard from "../../components/MovieCard/MovieCard";
 
-const Lancamentos = () => {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+  overview: string;
+  release_date: string;
+}
 
-  const getMovies = (pageNumber = 1) => {
+interface MoviesResponse {
+  results: Movie[];
+  total_pages: number;
+}
+
+const Lancamentos = () => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+
+  const getMovies = (pageNumber: number = 1): void => {
     api
-      .get("/movie/upcoming", {
+      .get<MoviesResponse>("/movie/upcoming", {
         params: { page: pageNumber },
       })
       .then((response) => {
@@ -36,6 +50,10 @@ const Lancamentos = () => {
   useEffect(() => {
     getMovies(page);
   }, [page]);
+
+  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number): void => {
+    setPage(value);
+  };
 
   if (loading) {
     return (
@@ -69,20 +87,16 @@ const Lancamentos = () => {
     );
   }
 
-  const handleChangePage = (event, value) => {
-    setPage(value);
-  };
-
   return (
     <>
       <Grid
         container
-        spacing={2} // Espaçamento entre os itens
+        spacing={2}
         sx={{
-          p: 2, // padding: 16px
+          p: 2,
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-          gap: 2, // gap: 16px
+          gap: 2,
         }}
       >
         {movies.map((movie) => (

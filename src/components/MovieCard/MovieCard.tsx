@@ -10,7 +10,24 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const MovieCard = ({ id, title, image, vote, release_date, showButton }) => {
+interface MovieCardProps {
+  id: number;
+  title: string;
+  image: string;
+  vote: number;
+  release_date: string;
+  showButton?: boolean; // opcional
+  overview?: string;
+}
+
+const MovieCard: React.FC<MovieCardProps> = ({
+  id,
+  title,
+  image,
+  vote,
+  release_date,
+  showButton = false,
+}) => {
   const navigate = useNavigate();
 
   const handleDetalhes = () => {
@@ -31,9 +48,7 @@ const MovieCard = ({ id, title, image, vote, release_date, showButton }) => {
           component="img"
           image={`https://image.tmdb.org/t/p/original/${image}`}
           alt={title}
-          sx={{
-            objectFit: "fill",
-          }}
+          sx={{ objectFit: "fill" }}
         />
         <CardContent sx={{ minHeight: 150 }}>
           <Typography gutterBottom variant="h6">
@@ -62,10 +77,13 @@ const MovieCard = ({ id, title, image, vote, release_date, showButton }) => {
         </CardContent>
       </CardActionArea>
 
-      {/* Só renderiza o botão se showButton for true */}
       {showButton && (
-        <CardActions sx={{ mt: "auto", display: "flex", justifyContent: "center" }}>
-          <Button variant="contained" onClick={handleDetalhes}>Detalhes</Button>
+        <CardActions
+          sx={{ mt: "auto", display: "flex", justifyContent: "center" }}
+        >
+          <Button variant="contained" onClick={handleDetalhes}>
+            Detalhes
+          </Button>
         </CardActions>
       )}
     </Card>
