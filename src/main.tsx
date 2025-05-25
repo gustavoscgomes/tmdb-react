@@ -8,8 +8,7 @@ import Footer from "./components/Footer/Footer";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import UpcomingMovies from "./pages/UpcomingMovies/UpcomingMovies";
 import About from "./pages/About/About";
-import { Details } from "@mui/icons-material";
-
+import Details from "./pages/Details/Details";
 
 
 createRoot(document.getElementById("root")!).render(

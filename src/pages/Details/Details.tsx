@@ -21,17 +21,16 @@ interface MovieDetails {
   genres: Genre[];
   runtime: number;
 }
-
-interface RouteParams {
-  id: string;
-}
+console.log("entrou");
 
 const Details = () => {
-  const { id } = useParams<{ id?: string }>();
+  const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  console.log("movie: ", movie);
+  
   const getMovie = () => {
     api
       .get<MovieDetails>(`/movie/${id}`)
@@ -48,6 +47,10 @@ const Details = () => {
   useEffect(() => {
     getMovie();
   }, [id]);
+
+  if (!id) {
+    return <ErrorBox message="ID do filme não fornecido." />;
+  }
 
   if (loading) {
     return <LoadingBox />;
