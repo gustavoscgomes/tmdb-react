@@ -1,6 +1,10 @@
 import { Box, Typography } from "@mui/material";
 
-const ErrorBox = ({ message }) => (
+interface ErrorBoxProps {
+  message: string;
+}
+
+const ErrorBox = ({ message }: ErrorBoxProps) => (
   <Box
     display="flex"
     justifyContent="center"

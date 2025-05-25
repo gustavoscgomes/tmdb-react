@@ -1,20 +1,40 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { Box, CircularProgress, Typography, Chip } from "@mui/material";
+import { Box, Typography, Chip } from "@mui/material";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import LoadingBox from "../../components/ui/LoadingBox";
 import ErrorBox from "../../components/ui/ErrorBox";
 
+interface Genre {
+  id: number;
+  name: string;
+}
+
+interface MovieDetails {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+  release_date: string;
+  overview: string;
+  genres: Genre[];
+  runtime: number;
+}
+
+interface RouteParams {
+  id: string;
+}
+
 const Details = () => {
-  const { id } = useParams();
-  const [movie, setMovie] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { id } = useParams<{ id?: string }>();
+  const [movie, setMovie] = useState<MovieDetails | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   const getMovie = () => {
     api
-      .get(`/movie/${id}`)
+      .get<MovieDetails>(`/movie/${id}`)
       .then((response) => {
         setMovie(response.data);
         setLoading(false);
@@ -30,32 +50,28 @@ const Details = () => {
   }, [id]);
 
   if (loading) {
-    return (
-      <LoadingBox />
-    );
+    return <LoadingBox />;
   }
 
-  if (error) {
-    return (
-      <ErrorBox message={error} />
-    );
+  if (error || !movie) {
+    return <ErrorBox message={error || "Filme não encontrado."} />;
   }
 
   return (
     <Box
       sx={{
-        m: "1rem", // margin
-        p: 4, // padding
+        m: "1rem",
+        p: 4,
         display: "flex",
         gap: 4,
         borderRadius: 1,
-        bgcolor: "#fff", // backgroundColor
+        bgcolor: "#fff",
         flexWrap: "wrap",
       }}
     >
-      {/* Coluna da esquerda */}
       <Box flex="0 0 320px">
         <MovieCard
+          id={movie.id}
           title={movie.title}
           image={movie.poster_path}
           vote={movie.vote_average}
@@ -64,7 +80,6 @@ const Details = () => {
         />
       </Box>
 
-      {/* Coluna da direita */}
       <Box flex="1">
         <Typography variant="h4" gutterBottom>
           {movie.title}
