@@ -1,6 +1,8 @@
 # 🎬 Projeto TMDB React
 
-Este projeto consome a API do TMDB e exibe informações sobre filmes utilizando **React**, **Material UI** e **Axios**.
+Este é um projeto de catálogo de filmes desenvolvido com **React** e **TypeScript**. Ele consome a API do **TMDB (The Movie Database)** para exibir os últimos lançamentos e permitir a pesquisa de filmes por nome.
+
+A interface é construída com os componentes do **Material UI (MUI)**, garantindo uma experiência moderna, responsiva e agradável ao usuário.
 
 ---
 
