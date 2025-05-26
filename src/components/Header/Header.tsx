@@ -28,9 +28,6 @@ const Header = () => {
           <NavLink to="/" style={{ textDecoration: "none" }}>
             <Typography sx={navLinkSX}>Lançamentos</Typography>
           </NavLink>
-          <NavLink to="/contato" style={{ textDecoration: "none" }}>
-            <Typography sx={navLinkSX}>Contato</Typography>
-          </NavLink>
           <NavLink to="/sobre" style={{ textDecoration: "none" }}>
             <Typography sx={navLinkSX}>Sobre</Typography>
           </NavLink>

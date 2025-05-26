@@ -62,6 +62,7 @@ const UpcomingMovies = () => {
 
   useEffect(() => {
     getMovies(page);
+    window.scrollTo(0, 0);
   }, [page]);
 
   const handleChangePage = (
